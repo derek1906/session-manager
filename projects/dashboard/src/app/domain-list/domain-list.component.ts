@@ -1,3 +1,4 @@
+import { BackgroundService, BackgroundPage } from './../background.service';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -7,9 +8,16 @@ import { Component, OnInit } from '@angular/core';
 })
 export class DomainListComponent implements OnInit {
 
-  constructor() { }
+  domains: string[];
 
-  ngOnInit() {
+  constructor(private backgroundService: BackgroundService) {}
+
+  async ngOnInit() {
+    const
+        background: BackgroundPage = await this.backgroundService.getBackgroundPage(),
+        datastore: Datastore = await background._require("datastore");
+
+    this.domains = Object.keys(await datastore.get("domains"));
+    console.log(this.domains);
   }
-
 }
