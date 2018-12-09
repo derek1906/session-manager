@@ -10,7 +10,8 @@
             "modules/cookiesObserver.js",
             "modules/contextMenu.js",
             "modules/pageAction.js",
-            "modules/datastore.js"
+            "modules/datastore.js",
+            "modules/cookies.js"
         ],
         "persistent": false
     },

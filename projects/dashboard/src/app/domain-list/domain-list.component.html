@@ -1,3 +1,22 @@
 <mat-list>
-    <mat-list-item *ngFor="let domain of domains"> {{domain}} </mat-list-item>
+    <!-- <ng-container *ngFor="let domain of domains; last as isLast">
+        <mat-list-item>
+            <domain-list-item [domain]="domain"></domain-list-item>
+        </mat-list-item>
+        <mat-divider *ngIf="!isLast"></mat-divider>
+    </ng-container> -->
+    {{domains.length}} Domains
+    <mat-accordion>
+        <mat-expansion-panel *ngFor="let domain of domains" [disabled]="!domainDetails[domain]">
+            <mat-expansion-panel-header>
+                <mat-panel-title>{{domain}}</mat-panel-title>
+                <mat-panel-description>
+                    <ng-container *ngIf="domainDetails[domain] as details; then loadedDescription; else loadingDescription"></ng-container>
+                    <ng-template #loadedDescription let-details>{{details.cookies.length}} Cookies</ng-template>
+                    <ng-template #loadingDescription>Loading...</ng-template>
+                </mat-panel-description>
+            </mat-expansion-panel-header>
+            <domain-list-item [domain]="domain" (detailsLoad)="onDomainListItemDetailsLoad($event)"></domain-list-item>
+        </mat-expansion-panel>
+    </mat-accordion>
 </mat-list>

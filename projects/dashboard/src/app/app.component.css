@@ -9,10 +9,7 @@
     max-width: 1024px;
     width: 100%;
     display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-mat-card {
-    width: 100%;
+    align-items: flex-start;
+    flex-direction: column;
+    padding-top: 50px;
 }

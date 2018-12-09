@@ -1,8 +1,18 @@
 _export("datastore", async () => {
     function initializeStorage() {
+        // chrome.cookies.getAll({}, cookies => {
+        //     let domains = {};
+        //     new Set(cookies.map(c => c.domain)).forEach(domain => {
+        //         domains[domain] = null;
+        //     });
+
+        //     chrome.storage.local.set({domains});
+        // })
         chrome.storage.local.set({
             "domains": {
-                "www.google.com": null
+                ".google.com": null,
+                ".bestbuy.com": null,
+                ".com": null
             }
         });
     }
@@ -23,7 +33,7 @@ _export("datastore", async () => {
         },
         async isUrlBeingTracked(url) {
             let domains = await this.get("domains");
-            
+
             return domains.hasOwnProperty(url.hostname);
         }
     };
