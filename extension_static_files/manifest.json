@@ -15,7 +15,9 @@
         ],
         "persistent": false
     },
-    "page_action": {},
+    "page_action": {
+        "default_popup": "popup/index.html"
+    },
     "permissions": [
         "cookies",
         "storage",

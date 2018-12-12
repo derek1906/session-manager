@@ -1,22 +1,15 @@
-<mat-list>
-    <!-- <ng-container *ngFor="let domain of domains; last as isLast">
-        <mat-list-item>
-            <domain-list-item [domain]="domain"></domain-list-item>
-        </mat-list-item>
-        <mat-divider *ngIf="!isLast"></mat-divider>
-    </ng-container> -->
-    {{domains.length}} Domains
-    <mat-accordion>
-        <mat-expansion-panel *ngFor="let domain of domains" [disabled]="!domainDetails[domain]">
-            <mat-expansion-panel-header>
-                <mat-panel-title>{{domain}}</mat-panel-title>
-                <mat-panel-description>
-                    <ng-container *ngIf="domainDetails[domain] as details; then loadedDescription; else loadingDescription"></ng-container>
-                    <ng-template #loadedDescription let-details>{{details.cookies.length}} Cookies</ng-template>
-                    <ng-template #loadingDescription>Loading...</ng-template>
-                </mat-panel-description>
-            </mat-expansion-panel-header>
-            <domain-list-item [domain]="domain" (detailsLoad)="onDomainListItemDetailsLoad($event)"></domain-list-item>
-        </mat-expansion-panel>
-    </mat-accordion>
-</mat-list>
+<mat-accordion>
+    <mat-expansion-panel *ngFor="let domain of domains" [disabled]="domainDetails[domain]?.status === 'LOADING'">
+        <mat-expansion-panel-header>
+            <mat-panel-title>{{domain}}</mat-panel-title>
+            <mat-panel-description [ngSwitch]="domainDetails[domain]?.status">
+                <ng-container *ngSwitchCase="'LOADED'">{{domainDetails[domain].cookies.length}} Cookies</ng-container>
+                <ng-container *ngSwitchCase="'LOADING'">Loading...</ng-container>
+                <ng-container *ngSwitchDefault>Click to load</ng-container>
+            </mat-panel-description>
+        </mat-expansion-panel-header>
+        <ng-template matExpansionPanelContent>
+            <domain-list-item [domain]="domain" (detailsLoadStart)="handleDetailsLoadStatusChange($event)" (detailsLoad)="handleDetailsLoadStatusChange($event)"></domain-list-item>
+        </ng-template>
+    </mat-expansion-panel>
+</mat-accordion>

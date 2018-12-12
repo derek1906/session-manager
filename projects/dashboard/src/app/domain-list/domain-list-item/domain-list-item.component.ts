@@ -3,7 +3,8 @@ import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
 
 export interface DetailsLoadDetail {
     domain: string;
-    cookies: chrome.cookies.Cookie[];
+    cookies?: chrome.cookies.Cookie[];
+    status: "LOADING" | "LOADED";
 }
 
 @Component({
@@ -28,18 +29,25 @@ export class DomainListItemComponent implements OnInit {
     }
 
     @Output() detailsLoad: EventEmitter<DetailsLoadDetail> = new EventEmitter();
+    @Output() detailsLoadStart: EventEmitter<DetailsLoadDetail> = new EventEmitter();
 
     constructor(backgroundModulesService: BackgroundModulesService) {
         this.cookiesModule = backgroundModulesService.getModule("cookies");
     }
 
-    ngOnInit() {}
+    ngOnInit() { }
 
     async loadByDomain(domain: string) {
         const cookiesModule = await this.cookiesModule;
+        this.detailsLoad.emit({ domain, status: "LOADING" });
+
         const cookies = await cookiesModule.getCookiesByDomain(domain);
 
-        const details: DetailsLoadDetail = { domain, cookies };
+        const details: DetailsLoadDetail = {
+            domain,
+            cookies,
+            status: "LOADED"
+        };
 
         this.cookies = cookies;
         this.detailsLoad.emit(details);

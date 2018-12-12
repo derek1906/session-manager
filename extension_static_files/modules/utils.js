@@ -12,6 +12,12 @@ _export("utils", async () => {
         },
         parseUrl(url) {
             return new URL(url);
+        },
+        ignoreError(func) {
+            return function (...args) {
+                if (chrome.runtime.lastError)   return;
+                func(...args);
+            };
         }
     };
 });

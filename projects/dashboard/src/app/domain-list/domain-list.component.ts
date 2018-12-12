@@ -10,7 +10,6 @@ import { Component, OnInit } from "@angular/core";
 export class DomainListComponent implements OnInit {
     domains: string[] = [];
     domainDetails: { [key: string]: DetailsLoadDetail } = {};
-    domainDetailsResolver = null;
 
     constructor(private backgroundModulesService: BackgroundModulesService) {}
 
@@ -22,25 +21,10 @@ export class DomainListComponent implements OnInit {
             "cookies"
         );
 
-        // this.domains = Object.keys(await datastore.get("domains"));
-        const domains = await datastore.get("domains");
-        this.loadDomains(Object.keys(domains));
-        // console.log(this.domains);
+        this.domains = Object.keys(await datastore.get("domains"));
     }
 
-    async loadDomains(domains: string[]) {
-        console.log(domains);
-        for (const domain of domains) {
-            this.domains.push(domain);
-            await new Promise(res => this.domainDetailsResolver = res);
-        }
-    }
-
-    onDomainListItemDetailsLoad(details: DetailsLoadDetail) {
+    handleDetailsLoadStatusChange(details: DetailsLoadDetail) {
         this.domainDetails[details.domain] = details;
-
-        if (this.domainDetailsResolver) {
-            this.domainDetailsResolver();
-        }
     }
 }

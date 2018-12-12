@@ -13,3 +13,7 @@
     flex-direction: column;
     padding-top: 50px;
 }
+
+domain-list {
+    width: 100%;
+}

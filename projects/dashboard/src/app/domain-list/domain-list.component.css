@@ -1,0 +1,7 @@
+mat-panel-description {
+    justify-content: flex-end;
+}
+
+domain-list-item {
+    max-height: 70vh;
+}

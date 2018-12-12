@@ -2,6 +2,8 @@
     <span>Dashboard</span>
 </mat-toolbar>
 <div class="container">
-    <h1 class="mat-headline">Domains</h1>
-    <domain-list></domain-list>
+    <h1 class="mat-headline">
+        Domains ({{domainList.domains.length}})
+    </h1>
+    <domain-list #domainList></domain-list>
 </div>

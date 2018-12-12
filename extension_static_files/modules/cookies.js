@@ -36,8 +36,12 @@ _export("cookies", async () => {
             return new Promise(res => chrome.cookies.getAll({ domain }, res));
         },
         async getCookiesByDomains(domains) {
-            let cookiesLists = await Promise.all(domains.map(this.getCookie));
-            return [].concat(...cookiesLists);
+            let results = {};
+
+            let cookiesLists = await Promise.all(domains.map(this.getCookiesByDomain));
+            cookiesLists.forEach((cookies, i) => results[domains[i]] = cookies);
+
+            return results;
         }
     };
 });
