@@ -13,3 +13,11 @@ td, th {
     white-space: nowrap;
     text-overflow: ellipsis;
 }
+
+.inherited-tag {
+    background: lightgray;
+    display: inline-flex;
+    align-items: center;
+    padding: 0px 5px;
+    margin-inline-end: 8px;
+}

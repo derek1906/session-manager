@@ -1,0 +1,20 @@
+<div>
+    Tab details: <pre>{{ tabDetails | json }}</pre>
+</div>
+<div>
+    Tracked?
+    <ul>
+        <li *ngFor="let item of derivedDomainsInfo | keyvalue: orderByDomainLengthDesc">
+            <label>
+                <input type="checkbox" [checked]="item.value" (change)="onIsDomainBeingTrackedChanged(item.key, $event.target.checked)" [disabled]="item.value === null">
+                {{item.key}}
+            </label>
+        </li>
+    </ul>
+</div>
+<div>
+    {{cookiesDetails?.length}} cookies:
+    <ul>
+        <li *ngFor="let cookie of cookiesDetails">{{cookie.name}} - <code>{{cookie.value}}</code></li>
+    </ul>
+</div>

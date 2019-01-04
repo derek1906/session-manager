@@ -31,7 +31,18 @@ _export("cookies", async () => {
         return url;
     }
 
+    const datastore = await _require("datastore");
+
     return {
+        getCookiesByOrigin(origin) {
+            return new Promise(res => chrome.cookies.getAll({ url: origin }, res));
+        },
+        async getTrackedOrigins() {
+            return Object.keys(await datastore.get("domains"));
+        },
+        getCookiesByUrl(url) {
+            return new Promise(res => chrome.cookies.getAll({ url: url.origin }, res));
+        },
         getCookiesByDomain(domain) {
             return new Promise(res => chrome.cookies.getAll({ domain }, res));
         },
@@ -42,6 +53,38 @@ _export("cookies", async () => {
             cookiesLists.forEach((cookies, i) => results[domains[i]] = cookies);
 
             return results;
+        },
+        getDerivedDomains(url) {
+            let hostname = url.hostname;
+            let parts = hostname.split(".");
+
+            let out = [];
+            for (let i = 0; i < parts.length; i++) {
+                let domain = parts
+                    .slice(i, parts.length)
+                    .join(".");
+                out.push(`${url.protocol}//${domain}`);
+            }
+
+            return out;
+        },
+        async isDomainBeingTracked(...domainsToCheck) {
+            const domains = await datastore.get("domains");
+            return domainsToCheck.reduce((acc, cur) => {
+                acc[cur] = domains.hasOwnProperty(cur);
+                return acc;
+            }, {});
+        },
+        async configureDomain(domain, isTracked) {
+            const domains = await datastore.get("domains");
+
+            if (isTracked) {
+                domains[domain] = true;
+            } else {
+                delete domains[domain];
+            }
+
+            await datastore.set("domains", domains);
         }
     };
 });

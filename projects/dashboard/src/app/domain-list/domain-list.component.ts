@@ -1,6 +1,6 @@
 import { DetailsLoadDetail } from './domain-list-item/domain-list-item.component';
-import { BackgroundModulesService } from "./../background-modules.service";
-import { Component, OnInit } from "@angular/core";
+import { BackgroundModulesService } from "commons/services/background-modules.service";
+import { Component, OnInit, NgZone } from "@angular/core";
 
 @Component({
     selector: "domain-list",
@@ -11,20 +11,29 @@ export class DomainListComponent implements OnInit {
     domains: string[] = [];
     domainDetails: { [key: string]: DetailsLoadDetail } = {};
 
-    constructor(private backgroundModulesService: BackgroundModulesService) {}
+    constructor(
+        private backgroundModulesService: BackgroundModulesService,
+        private ngZone: NgZone
+    ) {}
 
     async ngOnInit() {
-        const datastore: DatastoreModule = await this.backgroundModulesService.getModule(
-            "datastore"
-        );
         const cookiesModule: CookiesModule = await this.backgroundModulesService.getModule(
             "cookies"
         );
 
-        this.domains = Object.keys(await datastore.get("domains"));
+        chrome.storage.onChanged.addListener((changes, areaName) => {
+            if (areaName !== "local" || !("domains" in changes)) {
+                return;
+            }
+            this.ngZone.run(() => {
+                this.domains = Object.keys(changes.domains.newValue);
+            });
+        });
+
+        this.domains = await cookiesModule.getTrackedOrigins();
     }
 
     handleDetailsLoadStatusChange(details: DetailsLoadDetail) {
-        this.domainDetails[details.domain] = details;
+        this.domainDetails[details.origin] = details;
     }
 }

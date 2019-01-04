@@ -11,14 +11,16 @@
     "experimentalDecorators": true,
     "target": "es5",
     "typeRoots": [
-      "node_modules/@types"
+      "node_modules/@types",
+      "commons"
     ],
     "lib": [
       "es2018",
       "dom"
     ],
     "types": [
-      "chrome"
+      "chrome",
+      "services"
     ]
   }
 }

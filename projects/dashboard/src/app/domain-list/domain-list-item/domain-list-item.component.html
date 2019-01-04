@@ -1,14 +1,21 @@
-<table mat-table [dataSource]="cookies">
+<table #domainsTable mat-table matSort [dataSource]="cookies" (matSortChange)="onMatSortChange($event)">
     <!--- Note that these columns can be defined in any order.
         The actual rendered columns are set as a property on the row definition" -->
-
     <ng-container matColumnDef="domain" sticky>
-        <th mat-header-cell *matHeaderCellDef> Domain </th>
-        <td mat-cell *matCellDef="let element"> {{element.domain}} </td>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Domain </th>
+        <td mat-cell *matCellDef="let element">
+            <span *ngIf="isInherited(element.domain)" class="mat-small inherited-tag">
+                <mat-icon inline>arrow_upward</mat-icon> Inherited
+            </span>
+            <span *ngIf="element.session" class="mat-small inherited-tag">
+                <mat-icon inline>timer</mat-icon> Session
+            </span>
+            <span>{{element.domain}}</span>
+        </td>
     </ng-container>
 
     <ng-container matColumnDef="name">
-        <th mat-header-cell *matHeaderCellDef> Name </th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
         <td mat-cell *matCellDef="let element"> {{element.name}} </td>
     </ng-container>
 
