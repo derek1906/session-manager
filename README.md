@@ -1,5 +1,5 @@
 # Cookie Manager
-Cookie manager as an extension for Chrome.
+Cookie manager is an extension for Chrome that allows user to easily manage and manipulate cookies.
 
 ## What It Can Do
 - Select specific origins to view
@@ -17,3 +17,10 @@ Cookie manager as an extension for Chrome.
 - Angular 7
 - Angular Material
 - Webpack
+
+## Build
+Run the following in the terminal:
+
+    npm run build
+
+The resulting `/dist` directory can be packed into a Chrome extension.
