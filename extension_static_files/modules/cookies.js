@@ -40,6 +40,61 @@ _export("cookies", async () => {
         async getTrackedOrigins() {
             return Object.keys(await datastore.get("domains"));
         },
+        getDerivedOrigins(url) {
+            let hostname = url.hostname;
+            let parts = hostname.split(".");
+
+            let out = [];
+            for (let i = 0; i < parts.length; i++) {
+                let domain = parts
+                    .slice(i, parts.length)
+                    .join(".");
+                out.push(`${url.protocol}//${domain}`);
+            }
+
+            return out;
+        },
+        setCookie(cookieSetDetails) {
+            return new Promise((res, rej) => {
+                chrome.cookies.set(cookieSetDetails, cookie => {
+                    if (cookie) {
+                        res();
+                    } else {
+                        rej(chrome.runtime.lastError);
+                    }
+                });
+            })
+        },
+        async writeCookiesToStore(cookieStoreId, cookiesByOrigin) {
+            const cookies = [];
+
+            for (const cookiesPerOrigin of Object.values(cookiesByOrigin)) {
+                for (const cookie of Object.values(cookiesPerOrigin)) {
+                    cookies.push(normalizeCookie(cookie, cookieStoreId));
+                }
+            }
+
+            await Promise.all(cookies.map(cookie => this.setCookie(cookie)));
+        },
+        async getCookiesFromTrackedOrigins() {
+            const cookies = {};
+            const trackedOrigins = await this.getTrackedOrigins();
+            const cookiesByOrigin = await Promise.all(trackedOrigins.map(
+                origin => this.getCookiesByOrigin(origin)
+            ));
+
+            cookiesByOrigin.forEach(cookiesForOrigin => {
+                cookiesForOrigin.forEach(cookie => {
+                    if (!(cookie.domain in cookies)) {
+                        cookies[cookie.domain] = {};
+                    }
+                    cookies[cookie.domain][cookie.name] = cookie;
+                });
+            });
+
+            return cookies;
+        },
+
         getCookiesByUrl(url) {
             return new Promise(res => chrome.cookies.getAll({ url: url.origin }, res));
         },
@@ -53,20 +108,6 @@ _export("cookies", async () => {
             cookiesLists.forEach((cookies, i) => results[domains[i]] = cookies);
 
             return results;
-        },
-        getDerivedDomains(url) {
-            let hostname = url.hostname;
-            let parts = hostname.split(".");
-
-            let out = [];
-            for (let i = 0; i < parts.length; i++) {
-                let domain = parts
-                    .slice(i, parts.length)
-                    .join(".");
-                out.push(`${url.protocol}//${domain}`);
-            }
-
-            return out;
         },
         async isDomainBeingTracked(...domainsToCheck) {
             const domains = await datastore.get("domains");

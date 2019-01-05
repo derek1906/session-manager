@@ -52,7 +52,7 @@ export class AppComponent implements OnInit {
                 this.url = url;
                 this.isDomainBeingTracked = isDomainBeingTracked;
 
-                const derivedDomains = await cookiesModule.getDerivedDomains(
+                const derivedDomains = await cookiesModule.getDerivedOrigins(
                     url
                 );
                 this.derivedDomainsInfo = await cookiesModule.isDomainBeingTracked(

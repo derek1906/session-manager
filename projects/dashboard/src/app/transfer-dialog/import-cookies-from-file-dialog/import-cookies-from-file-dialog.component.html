@@ -1,0 +1,14 @@
+<p>
+    Import cookies from file.
+</p>
+<form #importForm="ngForm" (ngSubmit)="onFormSubmit()" [formGroup]="importOptions">
+    <mat-form-field>
+        <mat-select required placeholder="Select Target Cookie Store" formControlName="cookieStoreId">
+            <mat-option *ngFor="let cookieStoreId of availableCookieStoreIds" [value]="cookieStoreId">
+                Cookie Store {{cookieStoreId}}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+    <input type="file" (change)="onFileChange($event)" />
+</form>
+

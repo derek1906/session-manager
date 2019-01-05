@@ -1,0 +1,12 @@
+<p>
+    Transfer cookies to a different cookie store.
+</p>
+<form #transferForm="ngForm" (ngSubmit)="onFormSubmit()" [formGroup]="transferOptions">
+    <mat-form-field>
+        <mat-select required placeholder="Select Target Cookie Store" formControlName="cookieStoreId">
+            <mat-option *ngFor="let cookieStoreId of availableCookieStoreIds" [value]="cookieStoreId">
+                Cookie Store {{cookieStoreId}}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+</form>
