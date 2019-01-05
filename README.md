@@ -1,5 +1,5 @@
 # Cookie Manager
-Cookie manager as an extension for Chrome.
+Cookie manager is an extension for Chrome that allows user to easily manage and manipulate cookies.
 
 ## What It Can Do
 - Select specific origins to view
