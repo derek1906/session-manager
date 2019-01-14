@@ -20,7 +20,8 @@
     ],
     "types": [
       "chrome",
-      "services"
+      "services",
+      "serializers"
     ]
   }
 }

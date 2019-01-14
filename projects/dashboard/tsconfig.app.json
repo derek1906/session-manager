@@ -2,7 +2,7 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "outDir": "../../out-tsc/app",
-    "types": ["chrome", "services"]
+    "types": ["chrome", "services", "serializers", "crypto-js"]
   },
   "exclude": [
     "test.ts",

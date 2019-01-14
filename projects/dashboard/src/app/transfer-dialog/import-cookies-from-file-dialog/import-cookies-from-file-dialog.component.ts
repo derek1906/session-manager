@@ -70,8 +70,8 @@ export class ImportCookiesFromFileDialogComponent extends DialogTab
     }
 
     onFormStatusChange(status: string) {
-        console.log(status);
         this.actions[0].disabled = status !== "VALID";
+        this.actionsChanged.emit(this.actions);
     }
 
     onFileChange(event: Event) {
