@@ -14,6 +14,9 @@
     <div>
         <mat-form-field>
             <input matInput type="password" placeholder="Passphrase" formControlName="passphrase" [required]="_isPassphraseRequired">
+            <mat-hint align="start" *ngIf="_isPassphraseRequired; then passphraseHint else passphraseNotRequiredHint"></mat-hint>
+            <ng-template #passphraseHint>Passphrase will be used with the selected serialization method.</ng-template>
+            <ng-template #passphraseNotRequiredHint>Passphrase is not needed for the selected serialization method.</ng-template>
         </mat-form-field>
     </div>
 </form>

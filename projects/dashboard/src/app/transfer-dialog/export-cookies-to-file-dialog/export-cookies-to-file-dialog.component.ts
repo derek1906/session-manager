@@ -32,8 +32,8 @@ export class ExportCookiesToFileDialogComponent extends DialogTab
 
     exportOptions: FormGroup;
     serializationMethods: Array<[string, SerializationMethod]> = [
-        ["Plain", SerializationMethod.PLAIN],
-        ["AES", SerializationMethod.AES]
+        ["AES", SerializationMethod.AES],
+        ["Plaintext (not recommended)", SerializationMethod.PLAIN]
     ];
 
     get _isPassphraseRequired(): boolean {
@@ -58,11 +58,8 @@ export class ExportCookiesToFileDialogComponent extends DialogTab
             "cookies"
         );
         this.exportOptions = formBuilder.group({
-            serializationMethod: [
-                undefined as SerializationMethod,
-                Validators.required
-            ],
-            passphrase: [{ value: undefined as string, disabled: true }]
+            serializationMethod: [undefined, Validators.required],
+            passphrase: [undefined as string]
         });
         this.exportOptions.statusChanges.subscribe(status =>
             this.onFormStatusChange(status)
@@ -83,6 +80,7 @@ export class ExportCookiesToFileDialogComponent extends DialogTab
                 passphraseField.updateValueAndValidity();
             }
         );
+        this.exportOptions.controls.serializationMethod.setValue(SerializationMethod.AES);
 
         window["serializer"] = serializerService;
     }
